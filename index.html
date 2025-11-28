@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <title>Days Until</title>
+</head>
+<body>
+  <div class="app">
+    <h1>Days Until</h1>
+    <form id="eventForm">
+      <input type="text" id="eventName" placeholder="Event Name" required>
+      <input type="date" id="eventDate" required>
+      <button type="submit">Add</button>
+    </form>
+    <ul id="eventList"></ul>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
