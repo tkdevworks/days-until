@@ -9,7 +9,7 @@ const toggleMode = document.getElementById('toggleMode');
 let events = JSON.parse(localStorage.getItem('events')) || [];
 let currentUnit = unitSelect.value;
 
-// Predefined emoji/images per type
+// Predefined emoji per type
 function getImage(eventName) {
   const name = eventName.toLowerCase();
   if (name.includes("birthday")) return "🎂";
@@ -39,26 +39,25 @@ function saveEvents() {
 
 function renderEvents() {
   eventList.innerHTML = '';
-
-  // Sort events by nearest first
   events.sort((a,b) => new Date(a.date) - new Date(b.date));
 
-  events.forEach((ev, index) => {
+  events.forEach((ev,index) => {
     const li = document.createElement('li');
+    li.className = "bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md flex items-center justify-between gap-4 transition-transform hover:scale-[1.01]";
 
     const emoji = getImage(ev.name);
 
     li.innerHTML = `
-      <div class="event-img">${emoji}</div>
-      <div class="event-info">
-        <h3>${ev.name}</h3>
-        ${ev.note ? `<p>${ev.note}</p>` : ''}
+      <div class="text-3xl">${emoji}</div>
+      <div class="flex-1">
+        <h3 class="font-semibold text-lg">${ev.name}</h3>
+        ${ev.note ? `<p class="text-sm opacity-70">${ev.note}</p>` : ''}
       </div>
-      <div class="countdown">${getCountdown(ev.date,currentUnit)} ${currentUnit}</div>
-      <button class="delete-btn">Delete</button>
+      <div class="font-bold text-blue-500 dark:text-blue-400">${getCountdown(ev.date,currentUnit)} ${currentUnit}</div>
+      <button class="px-3 py-1 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors font-semibold">Delete</button>
     `;
 
-    li.querySelector('.delete-btn').onclick = () => {
+    li.querySelector('button').onclick = () => {
       events.splice(index,1);
       saveEvents();
       renderEvents();
@@ -68,32 +67,23 @@ function renderEvents() {
   });
 }
 
-// Form submit
 eventForm.addEventListener('submit', e => {
   e.preventDefault();
-  events.push({
-    name: eventName.value,
-    date: eventDate.value,
-    note: eventNote.value
-  });
+  events.push({ name:eventName.value, date:eventDate.value, note:eventNote.value });
   saveEvents();
   renderEvents();
   eventForm.reset();
 });
 
-// Unit change
 unitSelect.addEventListener('change', e => {
   currentUnit = e.target.value;
   renderEvents();
 });
 
-// Dark/light toggle
 toggleMode.addEventListener('click', () => {
   document.body.classList.toggle('dark');
 });
 
-// Update countdown every minute
 setInterval(renderEvents, 60000);
 
-// Initial render
 renderEvents();
